@@ -84,6 +84,8 @@
 	background: #2e2e2e; color: #e8e8e8;
 	border: 1px solid #4a4a4a; border-radius: 4px; cursor: pointer;
 }
+.opeptides-pen-wrap { margin: 1.5em 0; }
+.opeptides-pen-wrap svg { max-width: 420px; width: 100%; height: auto; }
 .opeptides-calc-note { font-style: italic; opacity: 0.75; color: #e0a800; }
 
 .opeptides-diary .opeptides-form {

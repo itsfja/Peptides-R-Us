@@ -131,9 +131,30 @@ class Opeptides_Shortcodes {
 						<tr><th>Volume per dose</th><td id="opep-r-vol">&nbsp;</td></tr>
 						<tr><th>Cartridge lasts</th><td id="opep-r-days">&nbsp;</td></tr>
 						<tr><th>Equivalent dose at 0.1 ml</th><td id="opep-r-01">&nbsp;</td></tr>
+						<tr><th>Target dose in IU (dial units)</th><td id="opep-r-iu">&nbsp;</td></tr>
 					</tbody>
 				</table>
 				<p class="opeptides-calc-note" id="opep-r-note"></p>
+			</div>
+			<div class="opeptides-pen-wrap">
+				<svg id="opep-pen" viewBox="0 0 420 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Convipen cartridge diagram">
+					<defs>
+						<linearGradient id="opep-pen-body" x1="0" y1="0" x2="0" y2="1">
+							<stop offset="0" stop-color="#3a3a3a"/>
+							<stop offset="1" stop-color="#1a1a1a"/>
+							</linearGradient>
+					</defs>
+					<rect x="10" y="45" width="230" height="34" rx="10" fill="url(#opep-pen-body)" stroke="#555"/>
+					<rect x="240" y="40" width="120" height="44" rx="6" fill="#101010" stroke="#555"/>
+					<rect id="opep-pen-fluid" x="244" y="44" width="112" height="36" rx="4" fill="#2a4d6e"/>
+					<g id="opep-pen-scale" fill="#cfcfcf" font-size="7" font-family="monospace"></g>
+					<rect x="360" y="34" width="44" height="52" rx="8" fill="url(#opep-pen-body)" stroke="#555"/>
+					<circle cx="382" cy="60" r="14" fill="#161616" stroke="#666"/>
+					<text id="opep-pen-dial" x="382" y="63" text-anchor="middle" fill="#8ab4f8" font-size="10" font-family="monospace">0</text>
+					<text x="240" y="34" fill="#cfcfcf" font-size="10" font-family="sans-serif">3 ml cartridge</text>
+					<rect id="opep-pen-dose-marker" x="244" y="40" width="3" height="44" fill="#e0a800" visibility="hidden"/>
+				</svg>
+				<p class="opeptides-calc-note">Dial readout shows the target dose in IU (1 IU = 0.01 ml). Amber marker shows the dose position within the cartridge.</p>
 			</div>
 		</div>
 		<?php
