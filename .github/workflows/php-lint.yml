@@ -1,0 +1,29 @@
+name: PHP Lint
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Lint plugin PHP files
+        run: |
+          set -euo pipefail
+          status=0
+          while IFS= read -r -d '' file; do
+            echo "Linting: $file"
+            php -l "$file" || status=1
+          done < <(find opeptides -name '*.php' -print0)
+          exit $status
