@@ -39,9 +39,13 @@ jQuery(function ($) {
 		var cartridge = parseFloat($('.opeptides-calc').data('cartridge')) || 3;
 		var mass = parseFloat($('#opep-mass').val()) || 0;   // mg
 		var vol = parseFloat($('#opep-volume').val()) || 0; // ml
-		var dose = parseFloat($('#opep-dose').val()) || 0;  // mcg
+		var doseRaw = parseFloat($('#opep-dose').val()) || 0; // mcg or mg
+		var doseUnit = $('#opep-dose-unit').val() || 'mcg';
+		var dose = doseUnit === 'mg' ? doseRaw * 1000 : doseRaw; // normalise to mcg
 		var doseIu = parseFloat($('#opep-dose-iu').val());  // IU (optional)
 		var freq = Math.max(1, parseInt($('#opep-freq').val(), 10) || 1);
+		var freqUnit = $('#opep-freq-unit').val() || 'day';
+		var dosesPerDay = freqUnit === 'week' ? freq / 7 : freq;
 
 		var conc = vol > 0 ? (mass * 1000) / vol : 0; // mcg/ml
 		var doseVol;
@@ -50,20 +54,20 @@ jQuery(function ($) {
 			/* IU drives the dose: derive the peptide-unit dose from it. */
 			doseVol = doseIu / 100;
 			dose = conc > 0 ? doseVol * conc : 0;
-			$('#opep-dose').val(dose > 0 ? dose.toFixed(1) : '');
+			$('#opep-dose').val(dose > 0 ? (doseUnit === 'mg' ? (dose / 1000).toFixed(3) : dose.toFixed(1)) : '');
 		} else {
 			doseVol = conc > 0 ? dose / conc : 0;
 			$('#opep-dose-iu').val(doseVol > 0 ? (doseVol * 100).toFixed(1) : '');
 		}
 
 		var totalDoses = doseVol > 0 ? vol / doseVol : 0;
-		var days = totalDoses > 0 ? totalDoses / freq : 0;
+		var days = totalDoses > 0 ? totalDoses / dosesPerDay : 0;
 		var atPointOne = conc * 0.1; // mcg delivered in 0.1 ml
 		var iu = doseVol * 100;
 
 		$('#opep-r-conc').text(conc > 0 ? conc.toFixed(1) + ' mcg/ml' : '—');
 		$('#opep-r-vol').text(doseVol > 0 ? doseVol.toFixed(3) + ' ml per dose' : '—');
-		$('#opep-r-days').text(days > 0 ? days.toFixed(1) + ' days (' + Math.floor(totalDoses) + ' doses)' : '—');
+		$('#opep-r-days').text(days > 0 ? days.toFixed(1) + ' days (' + Math.floor(totalDoses) + ' doses at ' + freq + '/' + freqUnit + ')' : '—');
 		$('#opep-r-01').text(atPointOne > 0 ? atPointOne.toFixed(1) + ' mcg' : '—');
 		$('#opep-r-iu').text(iu > 0 ? iu.toFixed(1) + ' IU (dial units)' : '—');
 

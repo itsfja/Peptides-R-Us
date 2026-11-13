@@ -61,6 +61,12 @@
 	border: 1px solid #3a3a3a; border-radius: 4px;
 }
 .opeptides-calc-form em { font-size: 0.85em; opacity: 0.7; }
+.opeptides-units { display: flex; gap: 6px; align-items: center; max-width: 340px; }
+.opeptides-units input { flex: 1; }
+.opeptides-units select {
+	padding: 6px 8px; background: #161616; color: #e8e8e8;
+	border: 1px solid #3a3a3a; border-radius: 4px;
+}
 .opeptides-calc-form .button,
 .opeptides-diary .opeptides-form .button,
 .opeptides-template .button {

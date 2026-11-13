@@ -116,11 +116,26 @@ class Opeptides_Shortcodes {
 				<label>Total solution volume (ml) <em>(cartridge holds <?php echo esc_html( $cartridge ); ?> ml)</em>
 					<input type="number" id="opep-volume" step="0.1" min="0" value="3" />
 				</label>
-				<label>Target dose (mcg)
-					<input type="number" id="opep-dose" step="10" min="0" value="250" />
+				<label>Target dose &mdash; peptide units
+					<span class="opeptides-units">
+						<input type="number" id="opep-dose" step="0.01" min="0" value="250" />
+						<select id="opep-dose-unit">
+							<option value="mcg" selected>mcg</option>
+							<option value="mg">mg</option>
+						</select>
+					</span>
 				</label>
-				<label>Doses per day
-					<input type="number" id="opep-freq" step="1" min="1" value="1" />
+				<label>Target dose &mdash; IU (pen dial units, 1 IU = 0.01 ml)
+					<input type="number" id="opep-dose-iu" step="0.1" min="0" placeholder="auto" />
+				</label>
+				<label>Doses
+					<span class="opeptides-units">
+						<input type="number" id="opep-freq" step="1" min="1" value="1" />
+						<select id="opep-freq-unit">
+							<option value="day" selected>per day</option>
+							<option value="week">per week</option>
+						</select>
+					</span>
 				</label>
 				<button type="button" class="button" id="opep-calc-run">Calculate</button>
 			</div>
