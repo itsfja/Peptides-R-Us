@@ -1,8 +1,10 @@
+/* Opeptides — dark theme */
+
 .opeptides-disclaimer {
-	background: #fff3cd;
-	border: 1px solid #f0c36d;
+	background: #241d0e;
+	border: 1px solid #6b5416;
 	border-left: 5px solid #e0a800;
-	color: #5c4400;
+	color: #f5d97b;
 	padding: 14px 18px;
 	margin: 0 0 1.5em;
 	border-radius: 4px;
@@ -11,52 +13,96 @@
 }
 .opeptides-disclaimer-icon { font-size: 1.1em; }
 
+.opeptides-encyclopaedia,
+.opeptides-calc,
+.opeptides-diary {
+	color: #e8e8e8;
+}
+
 .opeptides-encyclopaedia .opeptides-search { margin-bottom: 1em; }
 .opeptides-encyclopaedia .opeptides-search input[type="search"] {
 	padding: 6px 10px; margin-right: 8px; min-width: 260px;
+	background: #161616; color: #e8e8e8;
+	border: 1px solid #3a3a3a; border-radius: 4px;
+}
+.opeptides-encyclopaedia .opeptides-search .button {
+	background: #2e2e2e; color: #e8e8e8;
+	border: 1px solid #4a4a4a; border-radius: 4px; cursor: pointer;
 }
 .opeptides-cats { margin-bottom: 1.5em; }
 .opeptides-cat {
-	display: inline-block; background: #eef2f7; border-radius: 12px;
+	display: inline-block; background: #262626; color: #cfcfcf;
+	border: 1px solid #3a3a3a; border-radius: 12px;
 	padding: 3px 12px; margin: 0 6px 6px 0; text-decoration: none; font-size: 0.85em;
 }
+.opeptides-cat:hover { background: #333; color: #fff; }
+
 .opeptides-grid {
 	display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	gap: 16px;
 }
 .opeptides-card {
-	border: 1px solid #ddd; border-radius: 6px; padding: 16px; background: #fff;
+	border: 1px solid #3a3a3a; border-radius: 6px; padding: 16px; background: #161616;
 }
 .opeptides-card h3 { margin-top: 0; }
+.opeptides-card h3 a { color: #8ab4f8; }
+.opeptides-card h3 a:hover { color: #aecbfa; }
 .opeptides-meta { font-size: 0.85em; margin: 0.75em 0 0; }
 .opeptides-meta dt {
 	float: left; clear: left; width: 32%; font-weight: 600; padding-right: 6px;
+	color: #b0b0b0;
 }
 .opeptides-meta dd { margin: 0 0 4px 32%; overflow-wrap: anywhere; }
 
 .opeptides-calc-form label { display: block; margin-bottom: 10px; }
 .opeptides-calc-form input {
 	display: block; margin-top: 4px; padding: 6px 10px; max-width: 320px; width: 100%;
+	background: #161616; color: #e8e8e8;
+	border: 1px solid #3a3a3a; border-radius: 4px;
 }
 .opeptides-calc-form em { font-size: 0.85em; opacity: 0.7; }
+.opeptides-calc-form .button,
+.opeptides-diary .opeptides-form .button,
+.opeptides-template .button {
+	background: #2e2e2e; color: #e8e8e8;
+	border: 1px solid #4a4a4a; border-radius: 4px; cursor: pointer;
+	padding: 6px 14px;
+}
+.opeptides-calc-form .button:hover,
+.opeptides-diary .opeptides-form .button:hover,
+.opeptides-template .button:hover { background: #3a3a3a; }
+
 .opeptides-table {
 	border-collapse: collapse; width: 100%; max-width: 720px; margin: 1em 0;
 }
 .opeptides-table th, .opeptides-table td {
-	border: 1px solid #ddd; padding: 8px 10px; text-align: left; font-size: 0.95em;
+	border: 1px solid #3a3a3a; padding: 8px 10px; text-align: left; font-size: 0.95em;
 }
-.opeptides-table thead th { background: #f5f5f5; }
-.opeptides-calc-note { font-style: italic; opacity: 0.75; }
+.opeptides-table thead th { background: #222; color: #cfcfcf; }
+.opeptides-table tr { background: #161616; color: #e8e8e8; }
+.opeptides-table .button {
+	background: #2e2e2e; color: #e8e8e8;
+	border: 1px solid #4a4a4a; border-radius: 4px; cursor: pointer;
+}
+.opeptides-calc-note { font-style: italic; opacity: 0.75; color: #e0a800; }
 
 .opeptides-diary .opeptides-form {
 	display: flex; flex-wrap: wrap; gap: 8px; margin: 0.5em 0 1em;
 }
-.opeptides-diary .opeptides-form input { padding: 6px 10px; }
+.opeptides-diary .opeptides-form input {
+	padding: 6px 10px;
+	background: #161616; color: #e8e8e8;
+	border: 1px solid #3a3a3a; border-radius: 4px;
+}
 .opeptides-diary .opeptides-form input[name="note"] { flex: 1 1 200px; }
+.opeptides-diary .opeptides-form input::placeholder,
+.opeptides-encyclopaedia .opeptides-search input::placeholder { color: #777; }
 .opeptides-stock-total { font-size: 1.05em; }
 .opeptides-cycles { list-style: disc; padding-left: 20px; }
+.opeptides-cycles strong { color: #8ab4f8; }
 .opeptides-templates { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
 .opeptides-template {
-	border: 1px solid #ddd; border-radius: 6px; padding: 14px; background: #fafafa;
+	border: 1px solid #3a3a3a; border-radius: 6px; padding: 14px; background: #1a1a1a;
 }
-.opeptides-template p { font-size: 0.9em; }
+.opeptides-template strong { color: #cfcfcf; }
+.opeptides-template p { font-size: 0.9em; color: #ababab; }
