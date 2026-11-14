@@ -247,5 +247,62 @@ class Opeptides_Seeder {
 				wp_set_object_terms( $post_id, $term_id, Opeptides_CPT::TAXONOMY );
 			}
 		}
+
+		self::seed_catalog();
+	}
+
+	/**
+	 * Import the supplier catalog (includes/data/catalog.json) as
+	 * encyclopaedia entries. Skips any title that already exists.
+	 */
+	private static function seed_catalog() {
+		$file = OPEPTIDES_DIR . 'includes/data/catalog.json';
+		if ( ! file_exists( $file ) ) {
+			return;
+		}
+		$catalog = json_decode( file_get_contents( $file ), true );
+		if ( ! is_array( $catalog ) ) {
+			return;
+		}
+		foreach ( $catalog as $item ) {
+			$name = isset( $item['name'] ) ? sanitize_text_field( $item['name'] ) : '';
+			if ( ! $name || get_page_by_title( $name, OBJECT, Opeptides_CPT::POST_TYPE ) ) {
+				continue;
+			}
+			$strength    = isset( $item['strength'] ) ? sanitize_text_field( $item['strength'] ) : '';
+			$composition = isset( $item['composition'] ) ? sanitize_text_field( $item['composition'] ) : '';
+			$stock       = isset( $item['stock'] ) ? sanitize_text_field( $item['stock'] ) : '';
+			$warnings    = isset( $item['warnings'] ) && is_array( $item['warnings'] ) ? array_map( 'sanitize_text_field', $item['warnings'] ) : array();
+			$category    = isset( $item['category'] ) ? sanitize_text_field( $item['category'] ) : '';
+
+			$lines   = array();
+			$lines[] = 'Catalog listing imported for internal reference. Research use only.';
+			if ( $strength )    { $lines[] = 'Strength options: ' . $strength; }
+			if ( $composition ) { $lines[] = 'Composition: ' . $composition; }
+			if ( $stock )       { $lines[] = 'Supplier stock status: ' . $stock; }
+			if ( $warnings )    { $lines[] = 'Supplier-flagged cautions: ' . implode( '; ', $warnings ); }
+			$lines[] = 'This entry is a catalog record, not a monograph. No dosing, safety or efficacy information is provided or implied.';
+
+			$post_id = wp_insert_post( array(
+				'post_type'    => Opeptides_CPT::POST_TYPE,
+				'post_status'  => 'publish',
+				'post_title'   => $name,
+				'post_excerpt' => $category ? $name . ' — ' . $category . '.' : $name . '.',
+				'post_content' => implode( "\n\n", $lines ),
+			) );
+			if ( is_wp_error( $post_id ) || ! $post_id ) {
+				continue;
+			}
+			if ( $category ) {
+				$term = term_exists( $category, Opeptides_CPT::TAXONOMY );
+				if ( ! $term ) {
+					$term = wp_insert_term( $category, Opeptides_CPT::TAXONOMY );
+				}
+				if ( ! is_wp_error( $term ) ) {
+					$term_id = is_array( $term ) ? (int) $term['term_id'] : (int) $term;
+					wp_set_object_terms( $post_id, $term_id, Opeptides_CPT::TAXONOMY );
+				}
+			}
+		}
 	}
 }
