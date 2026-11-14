@@ -166,17 +166,19 @@ class Opeptides_Shortcodes {
 							</linearGradient>
 					</defs>
 					<g id="opep-convipen-group">
-						<rect x="2" y="57" width="26" height="6" fill="#9a9a9a"/>
-						<rect x="28" y="52" width="14" height="16" rx="2" fill="#666"/>
-						<rect x="42" y="40" width="120" height="44" rx="6" fill="#101010" stroke="#555"/>
-						<rect id="opep-pen-fluid" x="46" y="44" width="112" height="36" rx="4" fill="#1fb3a6"/>
+						<rect x="8" y="44" width="52" height="36" rx="12" fill="#111" stroke="#333"/>
+						<rect x="14" y="49" width="40" height="4" rx="2" fill="#2e2e2e"/>
+						<rect x="60" y="45" width="250" height="34" rx="12" fill="#1c5fae" stroke="#14477e"/>
+						<rect x="80" y="40" width="110" height="44" rx="6" fill="#3a3f44" fill-opacity="0.85" stroke="#555"/>
+						<rect id="opep-pen-fluid" x="84" y="44" width="102" height="36" rx="4" fill="#1fb3a6"/>
 						<g id="opep-pen-scale" fill="#e8e8e8" font-size="7" font-family="monospace"></g>
-						<rect x="162" y="45" width="170" height="34" rx="10" fill="url(#opep-pen-body)" stroke="#555"/>
-						<rect x="332" y="34" width="44" height="52" rx="8" fill="url(#opep-pen-body)" stroke="#555"/>
-						<circle cx="354" cy="60" r="14" fill="#161616" stroke="#666"/>
-						<text id="opep-pen-dial" x="354" y="63" text-anchor="middle" fill="#8ab4f8" font-size="10" font-family="monospace">0</text>
-						<text x="42" y="34" fill="#cfcfcf" font-size="10" font-family="sans-serif">3 ml cartridge (needle end left)</text>
-						<rect id="opep-pen-dose-marker" x="46" y="40" width="3" height="44" fill="#e0a800" visibility="hidden"/>
+						<rect x="205" y="40" width="92" height="44" rx="6" fill="#2a2a2a" stroke="#555"/>
+						<text x="215" y="52" fill="#cfcfcf" font-size="8" font-family="monospace">0 &#160;&#160;10&#160;&#160;20&#160;&#160;30</text>
+						<text id="opep-pen-dial" x="251" y="72" text-anchor="middle" fill="#8ab4f8" font-size="12" font-family="monospace">0</text>
+						<rect x="360" y="42" width="44" height="34" rx="8" fill="#111" stroke="#333"/>
+						<rect x="312" y="57" width="48" height="6" fill="#14477e"/>
+						<text x="80" y="34" fill="#cfcfcf" font-size="10" font-family="sans-serif">3 ml cartridge window (cap left, button right)</text>
+						<rect id="opep-pen-dose-marker" x="84" y="40" width="3" height="44" fill="#e0a800" visibility="hidden"/>
 					</g>
 					<g id="opep-syringe-group" visibility="hidden">
 						<rect x="2" y="57" width="28" height="6" fill="#9a9a9a"/>

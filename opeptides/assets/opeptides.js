@@ -15,7 +15,7 @@ jQuery(function ($) {
 		if ($scale.data('drawn')) { return; }
 		var ticks = 10;
 		for (var i = 0; i <= ticks; i++) {
-			var x = 46 + (112 * i / ticks);
+			var x = 84 + (102 * i / ticks);
 			$scale.append(svgEl('line', { x1: x, y1: 44, x2: x, y2: 44 + (i % 5 === 0 ? 6 : 3), stroke: '#e8e8e8', 'stroke-width': 1 }));
 			if (i % 5 === 0) {
 				var t = svgEl('text', { x: x, y: 57 });
@@ -49,7 +49,7 @@ jQuery(function ($) {
 		var frac = cartridge > 0 ? Math.min(1, doseVol / cartridge) : 0;
 		var $marker = $('#opep-pen-dose-marker');
 		if (doseVol > 0) {
-			$marker.attr({ x: 46 + (112 * frac), visibility: 'visible' });
+			$marker.attr({ x: 84 + (102 * frac), visibility: 'visible' });
 		} else {
 			$marker.attr('visibility', 'hidden');
 		}
