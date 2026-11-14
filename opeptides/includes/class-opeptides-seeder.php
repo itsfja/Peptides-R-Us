@@ -7,15 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Opeptides_Seeder {
 
 	public static function seed() {
-		$existing = get_posts( array(
-			'post_type'      => Opeptides_CPT::POST_TYPE,
-			'posts_per_page' => 1,
-			'post_status'    => 'any',
-			'fields'         => 'ids',
-		) );
-		if ( ! empty( $existing ) ) {
-			return;
-		}
 
 		$peptides = array(
 			array(
@@ -115,6 +106,103 @@ class Opeptides_Seeder {
 				'category' => 'Melanocortins',
 			),
 			array(
+				'title'   => 'Semaglutide',
+				'excerpt' => 'GLP-1 receptor agonist (the active ingredient in Ozempic/Wegovy) studied for glycaemic control and appetite suppression.',
+				'content' => "Semaglutide is a long-acting glucagon-like peptide-1 (GLP-1) analogue with 94% sequence homology to human GLP-1. It is an approved medicine (Ozempic, Wegovy, Rybelsus) for type 2 diabetes and obesity, acting on GLP-1 receptors to increase insulin secretion, suppress glucagon, slow gastric emptying and reduce appetite.\n\nIt is one of the few peptides on this site with large-scale human trial data behind it (STEP trials, SUSTAIN trials). Research-grade material sold by non-pharmacy suppliers is not pharmaceutical grade, and dosing errors on potent GLP-1 agonists carry real risk (hypoglycaemia with insulin/secretagogues, pancreatitis, GI effects).\n\nThis entry is informational only.",
+				'meta'    => array(
+					'formula'        => 'C187H294N40O45S (base)',
+					'weight'         => '~4113.6 Da',
+					'half_life'      => '~7 days (subcutaneous)',
+					'reconstitution' => 'Bacteriostatic water; typically 1-2ml per vial',
+					'storage'        => 'Refrigerated once reconstituted',
+					'typical_dose'   => 'Approved regimens: 0.25-2.4 mg weekly, titrated (reported, unverified)',
+					'side_effects'   => 'Nausea (common), vomiting, constipation/diarrhoea, pancreatitis (rare). Contraindicated with MEN2/MTC history',
+					'pen_dial'       => 'At 5mg/3ml the concentration is ~1667 mcg/ml; 0.5mg ≈ 0.30 ml',
+				),
+				'category' => 'Weight Management',
+			),
+			array(
+				'title'   => 'Tirzepatide',
+				'excerpt' => 'Dual GIP/GLP-1 receptor agonist (Mounjaro/Zepbound) studied for diabetes and weight management.',
+				'content' => "Tirzepatide is a 39-amino-acid synthetic peptide that acts as an agonist at both the glucose-dependent insulinotropic polypeptide (GIP) and GLP-1 receptors. It is an approved medicine (Mounjaro, Zepbound) and has outperformed semaglutide in head-to-head trials for weight loss.\n\nSame caveats as semaglutide apply: research-grade vials are not pharmaceutical grade, and the approved titration schedule exists for a reason — jumping dose steps causes severe GI side effects.\n\nThis entry is informational only.",
+				'meta'    => array(
+					'formula'        => 'C225H348N48O68S (base)',
+					'weight'         => '~4813.5 Da',
+					'half_life'      => '~5 days (subcutaneous)',
+					'reconstitution' => 'Bacteriostatic water',
+					'storage'        => 'Refrigerated once reconstituted',
+					'typical_dose'   => 'Approved regimens: 2.5-15 mg weekly, titrated (reported, unverified)',
+					'side_effects'   => 'Nausea, diarrhoea, vomiting, decreased appetite. Same MTC/MEN2 contraindications as GLP-1 class',
+					'pen_dial'       => 'At 10mg/3ml the concentration is ~3333 mcg/ml; 5mg ≈ 1.5 ml (exceeds a single 1ml syringe)',
+				),
+				'category' => 'Weight Management',
+			),
+			array(
+				'title'   => 'Retatrutide',
+				'excerpt' => 'Triple agonist (GLP-1/GIP/glucagon) in Phase 3 trials; notable for the largest reported weight reductions in its class.',
+				'content' => "Retatrutide is a triple-agonist peptide acting at GLP-1, GIP and glucagon receptors. It is not yet an approved medicine anywhere; Phase 2 data (NEJM 2023) showed mean weight reductions above 20% at higher doses, which is why it attracts so much informal interest despite no long-term safety data existing at all.\n\nThere is no approved dosing, no pharmacopoeial product, and no established safety monitoring pathway. Anything sold as research-grade retatrutide is unregulated material with unknown handling requirements.\n\nThis entry is informational only and is not a recommendation.",
+				'meta'    => array(
+					'formula'        => 'C225H342N46O68 (base, approx.)',
+					'weight'         => '~4771.6 Da',
+					'half_life'      => '~5-6 days (estimated)',
+					'reconstitution' => 'Bacteriostatic water',
+					'storage'        => 'Refrigerated once reconstituted',
+					'typical_dose'   => 'Trial regimens: 1-12 mg weekly, titrated (reported, unverified)',
+					'side_effects'   => 'Dose-dependent GI effects (nausea, vomiting, diarrhoea); long-term profile unknown',
+					'pen_dial'       => 'At 10mg/3ml the concentration is ~3333 mcg/ml; 6mg ≈ 1.8 ml',
+				),
+				'category' => 'Weight Management',
+			),
+			'title_placeholder' => 'x',
+			array(
+				'title'   => 'Epithalon',
+				'excerpt' => 'Short synthetic tetrapeptide studied for telomerase activation and circadian/melatonin effects in ageing models.',
+				'content' => "Epithalon (Epitalon, Ala-Glu-Asp-Gly) is a tetrapeptide derived from epithalamin, a pineal gland peptide. Russian research (Khavinson et al.) reports it activates telomerase, elongates telomeres in somatic cell cultures, and restores melatonin rhythms in animal and small human studies.\n\nWestern peer-reviewed replication is thin; the telomerase data comes mainly from one research group. It is one of the milder entries on this list, but also one of the least verified.\n\nThis entry is informational only.",
+				'meta'    => array(
+					'formula'        => 'C14H22N4O8',
+					'weight'         => '~378.4 Da',
+					'half_life'      => 'Minutes to ~1 hour',
+					'reconstitution' => 'Bacteriostatic water; 2ml per 10mg vial typical',
+					'storage'        => 'Refrigerated once reconstituted',
+					'typical_dose'   => 'Reported protocols: 5-10 mg daily over 10-20 day courses',
+					'side_effects'   => 'Few reported; long-term data absent',
+					'pen_dial'       => 'At 10mg/3ml the concentration is ~3333 mcg/ml; 10mg ≈ 3 ml (full cartridge)',
+				),
+				'category' => 'Longevity',
+			),
+			array(
+				'title'   => 'Selank',
+				'excerpt' => 'Anxiolytic heptapeptide derived from tuftsin, registered in Russia; nootropic sibling of Semax.',
+				'content' => "Selank is a synthetic heptapeptide (Thr-Lys-Pro-Arg-Pro-Gly-Pro) based on the immunomodulatory peptide tuftsin, developed at the same Russian institute as Semax and registered there as an anxiolytic. Unlike benzodiazepines it shows no sedation, dependence or cognitive impairment in the published Russian studies, and it modulates BDNF and enkephalin breakdown.\n\nAdministered intranasally. Western clinical evidence is essentially absent, so treat all dosing folklore as unverified.\n\nThis entry is informational only.",
+				'meta'    => array(
+					'formula'        => 'C33H57N11O9 (base)',
+					'weight'         => '~751.9 Da',
+					'half_life'      => 'Minutes intranasally; CNS effects outlast plasma',
+					'reconstitution' => 'Usually supplied as nasal drops, not injectable',
+					'storage'        => 'Refrigerated',
+					'typical_dose'   => 'Reported protocols: 0.25-1 mg intranasal daily',
+					'side_effects'   => 'Occasional mild drowsiness or headache',
+					'pen_dial'       => 'Not applicable — intranasal route',
+				),
+				'category' => 'Cognitive / Neuro',
+			),
+			array(
+				'title'   => 'NAD+ (Nicotinamide adenine dinucleotide)',
+				'excerpt' => 'Endogenous coenzyme central to redox metabolism and sirtuin signalling; informally injected for energy and longevity claims.',
+				'content' => "NAD+ is not a peptide but an endogenous pyridine nucleotide coenzyme present in every cell, central to energy metabolism, DNA repair (PARPs) and sirtuin signalling. NAD+ levels decline with age, which is the hook for the supplement/longevity industry.\n\nIt has real published pharmacology: NAD+ precursor supplementation (nicotinamide riboside, NMN) raises blood NAD+ in human trials. Direct NAD+ injection has no good human efficacy evidence; IV NAD+ is used in some addiction-medicine clinics with limited trial support. Subcutaneous injection of research-grade NAD+ is common informally but unvalidated, and high-dose IV administration is associated with significant side effects (nausea, cramping, phlebitis).\n\nThis entry is informational only.",
+				'meta'    => array(
+					'formula'        => 'C21H27N7O14P2 (oxidised form)',
+					'weight'         => '~663.4 Da',
+					'half_life'      => 'Minutes in plasma',
+					'reconstitution' => 'Bacteriostatic water; typically 2ml per 100mg vial',
+					'storage'        => 'Refrigerated; reconstituted NAD+ degrades over days',
+					'typical_dose'   => 'Reported protocols: 50-100 mg subcutaneous daily to weekly',
+					'side_effects'   => 'Injection site reactions; GI effects at high doses; long-term data absent',
+					'pen_dial'       => 'At 100mg/3ml the concentration is ~33 mg/ml; 100mg ≈ 3 ml (full cartridge)',
+				),
+				'category' => 'Metabolic / Longevity',
+			),
+			array(
 				'title'   => 'Semax',
 				'excerpt' => 'Neurotropic heptapeptide derived from ACTH(4-10), used clinically in Russia for brain injury and nootropic purposes.',
 				'content' => "Semax is a synthetic fragment of ACTH(4-10) with the addition of a Pro-Gly-Pro tail, developed in Russia where it is a registered drug for stroke, optic nerve disease and cognitive disorders. It modulates BDNF and NGF expression in animal studies.\n\nTypically administered intranasally. Western clinical data is essentially absent; everything here is informational only.",
@@ -133,6 +221,10 @@ class Opeptides_Seeder {
 		);
 
 		foreach ( $peptides as $p ) {
+			$existing = get_page_by_title( $p['title'], OBJECT, Opeptides_CPT::POST_TYPE );
+			if ( $existing ) {
+				continue;
+			}
 			$post_id = wp_insert_post( array(
 				'post_type'    => Opeptides_CPT::POST_TYPE,
 				'post_status'  => 'publish',
@@ -153,6 +245,63 @@ class Opeptides_Seeder {
 			if ( ! is_wp_error( $term ) ) {
 				$term_id = is_array( $term ) ? (int) $term['term_id'] : (int) $term;
 				wp_set_object_terms( $post_id, $term_id, Opeptides_CPT::TAXONOMY );
+			}
+		}
+
+		self::seed_catalog();
+	}
+
+	/**
+	 * Import the supplier catalog (includes/data/catalog.json) as
+	 * encyclopaedia entries. Skips any title that already exists.
+	 */
+	private static function seed_catalog() {
+		$file = OPEPTIDES_DIR . 'includes/data/catalog.json';
+		if ( ! file_exists( $file ) ) {
+			return;
+		}
+		$catalog = json_decode( file_get_contents( $file ), true );
+		if ( ! is_array( $catalog ) ) {
+			return;
+		}
+		foreach ( $catalog as $item ) {
+			$name = isset( $item['name'] ) ? sanitize_text_field( $item['name'] ) : '';
+			if ( ! $name || get_page_by_title( $name, OBJECT, Opeptides_CPT::POST_TYPE ) ) {
+				continue;
+			}
+			$strength    = isset( $item['strength'] ) ? sanitize_text_field( $item['strength'] ) : '';
+			$composition = isset( $item['composition'] ) ? sanitize_text_field( $item['composition'] ) : '';
+			$stock       = isset( $item['stock'] ) ? sanitize_text_field( $item['stock'] ) : '';
+			$warnings    = isset( $item['warnings'] ) && is_array( $item['warnings'] ) ? array_map( 'sanitize_text_field', $item['warnings'] ) : array();
+			$category    = isset( $item['category'] ) ? sanitize_text_field( $item['category'] ) : '';
+
+			$lines   = array();
+			$lines[] = 'Catalog listing imported for internal reference. Research use only.';
+			if ( $strength )    { $lines[] = 'Strength options: ' . $strength; }
+			if ( $composition ) { $lines[] = 'Composition: ' . $composition; }
+			if ( $stock )       { $lines[] = 'Supplier stock status: ' . $stock; }
+			if ( $warnings )    { $lines[] = 'Supplier-flagged cautions: ' . implode( '; ', $warnings ); }
+			$lines[] = 'This entry is a catalog record, not a monograph. No dosing, safety or efficacy information is provided or implied.';
+
+			$post_id = wp_insert_post( array(
+				'post_type'    => Opeptides_CPT::POST_TYPE,
+				'post_status'  => 'publish',
+				'post_title'   => $name,
+				'post_excerpt' => $category ? $name . ' — ' . $category . '.' : $name . '.',
+				'post_content' => implode( "\n\n", $lines ),
+			) );
+			if ( is_wp_error( $post_id ) || ! $post_id ) {
+				continue;
+			}
+			if ( $category ) {
+				$term = term_exists( $category, Opeptides_CPT::TAXONOMY );
+				if ( ! $term ) {
+					$term = wp_insert_term( $category, Opeptides_CPT::TAXONOMY );
+				}
+				if ( ! is_wp_error( $term ) ) {
+					$term_id = is_array( $term ) ? (int) $term['term_id'] : (int) $term;
+					wp_set_object_terms( $post_id, $term_id, Opeptides_CPT::TAXONOMY );
+				}
 			}
 		}
 	}

@@ -116,11 +116,26 @@ class Opeptides_Shortcodes {
 				<label>Total solution volume (ml) <em>(cartridge holds <?php echo esc_html( $cartridge ); ?> ml)</em>
 					<input type="number" id="opep-volume" step="0.1" min="0" value="3" />
 				</label>
-				<label>Target dose (mcg)
-					<input type="number" id="opep-dose" step="10" min="0" value="250" />
+				<label>Target dose &mdash; peptide units
+					<span class="opeptides-units">
+						<input type="number" id="opep-dose" step="0.01" min="0" value="250" />
+						<select id="opep-dose-unit">
+							<option value="mcg" selected>mcg</option>
+							<option value="mg">mg</option>
+						</select>
+					</span>
 				</label>
-				<label>Doses per day
-					<input type="number" id="opep-freq" step="1" min="1" value="1" />
+				<label>Target dose &mdash; IU (pen dial units, 1 IU = 0.01 ml)
+					<input type="number" id="opep-dose-iu" step="0.1" min="0" placeholder="auto" />
+				</label>
+				<label>Doses
+					<span class="opeptides-units">
+						<input type="number" id="opep-freq" step="1" min="1" value="1" />
+						<select id="opep-freq-unit">
+							<option value="day" selected>per day</option>
+							<option value="week">per week</option>
+						</select>
+					</span>
 				</label>
 				<button type="button" class="button" id="opep-calc-run">Calculate</button>
 			</div>
@@ -131,10 +146,55 @@ class Opeptides_Shortcodes {
 						<tr><th>Volume per dose</th><td id="opep-r-vol">&nbsp;</td></tr>
 						<tr><th>Cartridge lasts</th><td id="opep-r-days">&nbsp;</td></tr>
 						<tr><th>Equivalent dose at 0.1 ml</th><td id="opep-r-01">&nbsp;</td></tr>
+						<tr><th>Target dose in IU (dial units)</th><td id="opep-r-iu">&nbsp;</td></tr>
 					</tbody>
 				</table>
 				<p class="opeptides-calc-note" id="opep-r-note"></p>
 			</div>
+			<div class="opeptides-pen-wrap">
+				<label class="opeptides-device-select">Device:
+					<select id="opep-device">
+						<option value="convipen" selected>Convipen (3 ml cartridge)</option>
+						<option value="syringe">1 ml insulin syringe (U-100)</option>
+					</select>
+				</label>
+				<svg id="opep-pen" viewBox="0 0 420 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Injection device diagram">
+					<defs>
+						<linearGradient id="opep-pen-body" x1="0" y1="0" x2="0" y2="1">
+							<stop offset="0" stop-color="#3a3a3a"/>
+							<stop offset="1" stop-color="#1a1a1a"/>
+							</linearGradient>
+					</defs>
+					<g id="opep-convipen-group">
+						<rect x="8" y="44" width="52" height="36" rx="12" fill="#111" stroke="#333"/>
+						<rect x="14" y="49" width="40" height="4" rx="2" fill="#2e2e2e"/>
+						<rect x="60" y="45" width="250" height="34" rx="12" fill="#1c5fae" stroke="#14477e"/>
+						<rect x="80" y="40" width="110" height="44" rx="6" fill="#3a3f44" fill-opacity="0.85" stroke="#555"/>
+						<rect id="opep-pen-fluid" x="84" y="44" width="102" height="36" rx="4" fill="#1fb3a6"/>
+						<g id="opep-pen-scale" fill="#e8e8e8" font-size="7" font-family="monospace"></g>
+						<rect x="205" y="40" width="92" height="44" rx="6" fill="#2a2a2a" stroke="#555"/>
+						<text x="215" y="52" fill="#cfcfcf" font-size="8" font-family="monospace">0 &#160;&#160;10&#160;&#160;20&#160;&#160;30</text>
+						<text id="opep-pen-dial" x="251" y="72" text-anchor="middle" fill="#8ab4f8" font-size="12" font-family="monospace">0</text>
+						<rect x="360" y="42" width="44" height="34" rx="8" fill="#111" stroke="#333"/>
+						<rect x="312" y="57" width="48" height="6" fill="#14477e"/>
+						<text x="80" y="34" fill="#cfcfcf" font-size="10" font-family="sans-serif">3 ml cartridge window (cap left, button right)</text>
+						<rect id="opep-pen-dose-marker" x="84" y="40" width="3" height="44" fill="#e0a800" visibility="hidden"/>
+					</g>
+					<g id="opep-syringe-group" visibility="hidden">
+						<rect x="2" y="57" width="28" height="6" fill="#9a9a9a"/>
+						<rect x="30" y="50" width="30" height="20" rx="3" fill="#e07020"/>
+						<rect x="60" y="42" width="280" height="36" rx="4" fill="#101010" stroke="#555"/>
+						<rect id="opep-syr-fluid" x="64" y="46" width="0" height="28" rx="2" fill="#e07020"/>
+						<g id="opep-syr-scale" fill="#e8e8e8" font-size="7" font-family="monospace"></g>
+						<rect x="340" y="38" width="12" height="44" fill="#c8c8c8"/>
+						<rect x="352" y="30" width="56" height="10" rx="3" fill="#c8c8c8"/>
+						<rect x="352" y="80" width="56" height="10" rx="3" fill="#c8c8c8"/>
+						<text x="60" y="34" fill="#cfcfcf" font-size="10" font-family="sans-serif">1 ml U-100 syringe (needle end left)</text>
+						<rect id="opep-syr-dose-marker" x="64" y="42" width="3" height="36" fill="#e0a800" visibility="hidden"/>
+					</g>
+				</svg>
+				<p class="opeptides-calc-note" id="opep-pen-note">Convipen: dial readout shows the target dose in IU (1 IU = 0.01 ml). Amber marker shows the dose position within the cartridge.</p>
+						</div>
 		</div>
 		<?php
 		return ob_get_clean();

@@ -61,8 +61,10 @@ final class Opeptides {
 	}
 
 	public function enqueue() {
-		wp_register_style( 'opeptides', OPEPTIDES_URL . 'assets/opeptides.css', array(), OPEPTIDES_VERSION );
-		wp_register_script( 'opeptides', OPEPTIDES_URL . 'assets/opeptides.js', array( 'jquery' ), OPEPTIDES_VERSION, true );
+		$css_version = file_exists( OPEPTIDES_DIR . 'assets/opeptides.css' ) ? (string) filemtime( OPEPTIDES_DIR . 'assets/opeptides.css' ) : OPEPTIDES_VERSION;
+		$js_version = file_exists( OPEPTIDES_DIR . 'assets/opeptides.js' ) ? (string) filemtime( OPEPTIDES_DIR . 'assets/opeptides.js' ) : OPEPTIDES_VERSION;
+		wp_register_style( 'opeptides', OPEPTIDES_URL . 'assets/opeptides.css', array(), $css_version );
+		wp_register_script( 'opeptides', OPEPTIDES_URL . 'assets/opeptides.js', array( 'jquery' ), $js_version, true );
 		wp_localize_script( 'opeptides', 'opeptidesData', array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'opeptides_nonce' ),
