@@ -92,7 +92,7 @@ class Opeptides_Seeder {
 			array(
 				'title'   => 'GHK-Cu (Copper tripeptide)',
 				'excerpt' => 'Naturally occurring copper-binding tripeptide studied for skin repair, collagen stimulation and hair growth.',
-				'content' => "GHK-Cu (glycyl-L-histidyl-L-lysine : copper(II)) is an endogenous tripeptide that declines with age. It is one of the better-studied cosmetic peptides, with published in vitro and small clinical work on wound healing, collagen synthesis and skin remodelling.\n\nUsed topically in many skincare formulations; subcutaneous use is discussed informally but has less supporting evidence.\n\nThis entry is informational only.",
+				'content' => "GHK-Cu (glycyl-L-histidyl-L-lysine complexed with copper(II)) is an endogenous tripeptide first isolated as the wound-healing factor of human plasma (Maquart et al., 1988). Its sequence occurs naturally in the alpha-2(I) chain of collagen, so proteases release it at wound sites — a genuine damage signal, not a synthetic invention.\n\nPlasma GHK falls from roughly 200 ng/mL at age 20 to well under half that by 60, which is the basis of the anti-ageing interest. Mechanistically it is unusually broad for a tripeptide: transcriptomic work shows it shifts the expression of over 4,000 human genes — collagen and elastin up, pro-inflammatory cytokines down — and it drives fibroblast collagen deposition at nanomolar concentrations.\n\nThe honest evidence hierarchy: strong in vitro and animal wound-healing data (GHK-collagen dressings raised wound collagen ~9-fold in rats), a small but real 2024 RCT showing microneedling plus GHK-Cu improved androgenetic alopecia, and a thin shelf of mostly industry-funded cosmetic trials. What does NOT exist is any human injectable data — every bro protocol for subcutaneous GHK-Cu is extrapolated from topical cosmetics work.\n\nThis entry is informational only and is not a recommendation.",
 				'meta'    => array(
 					'formula'        => 'C14H24N6O4 · Cu',
 					'weight'         => '403.9 Da',
@@ -204,7 +204,7 @@ class Opeptides_Seeder {
 			array(
 				'title'   => 'NAD+ (Nicotinamide adenine dinucleotide)',
 				'excerpt' => 'Endogenous coenzyme central to redox metabolism and sirtuin signalling; informally injected for energy and longevity claims.',
-				'content' => "NAD+ is not a peptide but an endogenous pyridine nucleotide coenzyme present in every cell, central to energy metabolism, DNA repair (PARPs) and sirtuin signalling. NAD+ levels decline with age, which is the hook for the supplement/longevity industry.\n\nIt has real published pharmacology: NAD+ precursor supplementation (nicotinamide riboside, NMN) raises blood NAD+ in human trials. Direct NAD+ injection has no good human efficacy evidence; IV NAD+ is used in some addiction-medicine clinics with limited trial support. Subcutaneous injection of research-grade NAD+ is common informally but unvalidated, and high-dose IV administration is associated with significant side effects (nausea, cramping, phlebitis).\n\nThis entry is informational only.",
+				'content' => "NAD+ is not a peptide but an endogenous pyridine nucleotide coenzyme present in every cell, central to energy metabolism, DNA repair (PARPs) and sirtuin signalling. NAD+ levels decline with age, which is the hook for the supplement/longevity industry.\n\nThe published human pharmacology is real but consistently ORAL: nicotinamide riboside robustly raises blood NAD+ (Trammell/Brenner, Nat Commun 2016), NR shifted muscle acylcarnitines in older adults (Martens, 2018), NMN improved muscle insulin signalling in postmenopausal prediabetic women (Yoshino, Science 2021), and a multicentre dose-dependent RCT confirmed dose-response and safety (Yi, Geroscience 2023). A 2023 systematic review found no adverse effects across NMN trials — with the crucial caveat that every single trial used oral precursors.\n\nWhat the bro/clinic scene sells is the opposite: 50-100 mg subcutaneous daily, or 500-1000 mg IV 'drips'. Direct NAD+ injection has no RCT support whatsoever; IV NAD+ evidence is limited to small addiction-medicine studies with significant infusion side effects (nausea, cramping, phlebitis). Subcutaneous research-grade use is entirely unvalidated.\n\nThis entry is informational only and is not a recommendation.",
 				'meta'    => array(
 					'formula'        => 'C21H27N7O14P2 (oxidised form)',
 					'weight'         => '~663.4 Da',
@@ -289,10 +289,10 @@ class Opeptides_Seeder {
 			$existing_id = self::find_by_title( $name );
 			if ( $existing_id && strpos( get_post_field( 'post_content', $existing_id ), 'Catalog listing imported' ) === false ) {
 				// curated monograph: never overwrite content, but attach studies/bro-lore meta if missing
-				if ( ! empty( $item['studies'] ) && ! get_post_meta( $existing_id, '_opeptide_studies', true ) ) {
+				if ( ! empty( $item['studies'] ) ) {
 					update_post_meta( $existing_id, '_opeptide_studies', wp_json_encode( $item['studies'] ) );
 				}
-				if ( ! empty( $item['bro_lore'] ) && ! get_post_meta( $existing_id, '_opeptide_bro_lore', true ) ) {
+				if ( ! empty( $item['bro_lore'] ) ) {
 					update_post_meta( $existing_id, '_opeptide_bro_lore', sanitize_textarea_field( $item['bro_lore'] ) );
 				}
 				continue;
