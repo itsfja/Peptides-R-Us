@@ -91,6 +91,7 @@ class Opeptides_Seeder {
 			),
 			array(
 				'title'   => 'GHK-Cu (Copper tripeptide)',
+				'rev'     => 2,
 				'excerpt' => 'Naturally occurring copper-binding tripeptide studied for skin repair, collagen stimulation and hair growth.',
 				'content' => "GHK-Cu (glycyl-L-histidyl-L-lysine complexed with copper(II)) is an endogenous tripeptide first isolated as the wound-healing factor of human plasma (Maquart et al., 1988). Its sequence occurs naturally in the alpha-2(I) chain of collagen, so proteases release it at wound sites — a genuine damage signal, not a synthetic invention.\n\nPlasma GHK falls from roughly 200 ng/mL at age 20 to well under half that by 60, which is the basis of the anti-ageing interest. Mechanistically it is unusually broad for a tripeptide: transcriptomic work shows it shifts the expression of over 4,000 human genes — collagen and elastin up, pro-inflammatory cytokines down — and it drives fibroblast collagen deposition at nanomolar concentrations.\n\nThe honest evidence hierarchy: strong in vitro and animal wound-healing data (GHK-collagen dressings raised wound collagen ~9-fold in rats), a small but real 2024 RCT showing microneedling plus GHK-Cu improved androgenetic alopecia, and a thin shelf of mostly industry-funded cosmetic trials. What does NOT exist is any human injectable data — every bro protocol for subcutaneous GHK-Cu is extrapolated from topical cosmetics work.\n\nThis entry is informational only and is not a recommendation.",
 				'meta'    => array(
@@ -203,6 +204,7 @@ class Opeptides_Seeder {
 			),
 			array(
 				'title'   => 'NAD+ (Nicotinamide adenine dinucleotide)',
+				'rev'     => 2,
 				'excerpt' => 'Endogenous coenzyme central to redox metabolism and sirtuin signalling; informally injected for energy and longevity claims.',
 				'content' => "NAD+ is not a peptide but an endogenous pyridine nucleotide coenzyme present in every cell, central to energy metabolism, DNA repair (PARPs) and sirtuin signalling. NAD+ levels decline with age, which is the hook for the supplement/longevity industry.\n\nThe published human pharmacology is real but consistently ORAL: nicotinamide riboside robustly raises blood NAD+ (Trammell/Brenner, Nat Commun 2016), NR shifted muscle acylcarnitines in older adults (Martens, 2018), NMN improved muscle insulin signalling in postmenopausal prediabetic women (Yoshino, Science 2021), and a multicentre dose-dependent RCT confirmed dose-response and safety (Yi, Geroscience 2023). A 2023 systematic review found no adverse effects across NMN trials — with the crucial caveat that every single trial used oral precursors.\n\nWhat the bro/clinic scene sells is the opposite: 50-100 mg subcutaneous daily, or 500-1000 mg IV 'drips'. Direct NAD+ injection has no RCT support whatsoever; IV NAD+ evidence is limited to small addiction-medicine studies with significant infusion side effects (nausea, cramping, phlebitis). Subcutaneous research-grade use is entirely unvalidated.\n\nThis entry is informational only and is not a recommendation.",
 				'meta'    => array(
@@ -238,6 +240,16 @@ class Opeptides_Seeder {
 		foreach ( $peptides as $p ) {
 			$existing = self::find_by_title( $p['title'] );
 			if ( $existing ) {
+				$rev = isset( $p['rev'] ) ? (int) $p['rev'] : 1;
+				$stored_rev = (int) get_post_meta( $existing, '_opeptide_rev', true );
+				if ( $rev > $stored_rev ) {
+					wp_update_post( array(
+						'ID'           => $existing,
+						'post_content' => $p['content'],
+						'post_excerpt' => $p['excerpt'],
+					) );
+					update_post_meta( $existing, '_opeptide_rev', $rev );
+				}
 				continue;
 			}
 			$post_id = wp_insert_post( array(
@@ -250,6 +262,7 @@ class Opeptides_Seeder {
 			if ( is_wp_error( $post_id ) || ! $post_id ) {
 				continue;
 			}
+			update_post_meta( $post_id, '_opeptide_rev', isset( $p['rev'] ) ? (int) $p['rev'] : 1 );
 			foreach ( $p['meta'] as $key => $value ) {
 				update_post_meta( $post_id, '_opeptide_' . $key, $value );
 			}
