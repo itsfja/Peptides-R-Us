@@ -141,3 +141,22 @@
 }
 .opeptides-template strong { color: #cfcfcf; }
 .opeptides-template p { font-size: 0.9em; color: #ababab; }
+
+/* Single peptide pages */
+.opeptides-single-meta { max-width: 720px; }
+.opeptides-single-meta th { width: 32%; }
+.opeptides-studies { list-style: none; padding-left: 0; }
+.opeptides-studies li {
+	border: 1px solid #3a3a3a; border-radius: 6px; background: #161616;
+	padding: 12px 14px; margin-bottom: 10px;
+}
+.opeptides-study-quality {
+	display: inline-block; font-size: 0.75em; font-weight: 700; text-transform: uppercase;
+	border-radius: 10px; padding: 2px 10px; margin-right: 6px;
+	background: #2e4d2e; color: #9fd89f;
+}
+.opeptides-bro-lore {
+	border: 1px dashed #6b5416; border-radius: 6px; background: #241d0e;
+	color: #f5d97b; padding: 12px 14px;
+}
+.opeptides-research-disclaimer { margin-top: 2em; font-size: 0.9em; }

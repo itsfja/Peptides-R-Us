@@ -288,7 +288,14 @@ class Opeptides_Seeder {
 
 			$existing_id = self::find_by_title( $name );
 			if ( $existing_id && strpos( get_post_field( 'post_content', $existing_id ), 'Catalog listing imported' ) === false ) {
-				continue; // already a curated monograph; never overwrite
+				// curated monograph: never overwrite content, but attach studies/bro-lore meta if missing
+				if ( ! empty( $item['studies'] ) && ! get_post_meta( $existing_id, '_opeptide_studies', true ) ) {
+					update_post_meta( $existing_id, '_opeptide_studies', wp_json_encode( $item['studies'] ) );
+				}
+				if ( ! empty( $item['bro_lore'] ) && ! get_post_meta( $existing_id, '_opeptide_bro_lore', true ) ) {
+					update_post_meta( $existing_id, '_opeptide_bro_lore', sanitize_textarea_field( $item['bro_lore'] ) );
+				}
+				continue;
 			}
 
 			$meta = isset( $item['meta'] ) && is_array( $item['meta'] ) ? $item['meta'] : array();
@@ -324,6 +331,12 @@ class Opeptides_Seeder {
 			}
 			foreach ( $meta as $key => $value ) {
 				update_post_meta( $post_id, '_opeptide_' . sanitize_key( $key ), sanitize_text_field( $value ) );
+			}
+			if ( ! empty( $item['studies'] ) ) {
+				update_post_meta( $post_id, '_opeptide_studies', wp_json_encode( $item['studies'] ) );
+			}
+			if ( ! empty( $item['bro_lore'] ) ) {
+				update_post_meta( $post_id, '_opeptide_bro_lore', sanitize_textarea_field( $item['bro_lore'] ) );
 			}
 			if ( $category ) {
 				$term = term_exists( $category, Opeptides_CPT::TAXONOMY );

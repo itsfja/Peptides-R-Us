@@ -75,7 +75,79 @@ final class Opeptides {
 	 * Show the liability header on any page that contains our shortcodes
 	 * (or everywhere, if the sitewide option is on).
 	 */
+	/**
+	 * Single peptide pages: append the data fields, attributed studies,
+	 * bro-lore notes, and a research-use-only disclaimer.
+	 */
+	public function single_entry_sections( $content ) {
+		if ( ! is_singular( Opeptides_CPT::POST_TYPE ) || ! in_the_loop() || ! is_main_query() ) {
+			return $content;
+		}
+		wp_enqueue_style( 'opeptides' );
+		$post_id = get_the_ID();
+
+		$labels = array(
+			'formula'        => 'Formula',
+			'weight'        => 'Molecular weight',
+			'half_life'      => 'Half-life',
+			'reconstitution' => 'Reconstitution',
+			'storage'        => 'Storage',
+			'typical_dose'   => 'Reported dose',
+			'side_effects'   => 'Side effects',
+			'pen_dial'       => 'Convipen dial',
+		);
+		$rows = '';
+		foreach ( $labels as $key => $label ) {
+			$value = get_post_meta( $post_id, '_opeptide_' . $key, true );
+			if ( $value ) {
+				$rows .= '<tr><th>' . esc_html( $label ) . '</th><td>' . esc_html( $value ) . '</td></tr>';
+			}
+		}
+		if ( $rows ) {
+			$content .= '<h3>Peptide data</h3><table class="opeptides-table opeptides-single-meta"><tbody>' . $rows . '</tbody></table>';
+		}
+
+		$studies_json = get_post_meta( $post_id, '_opeptide_studies', true );
+		$studies = $studies_json ? json_decode( $studies_json, true ) : array();
+		if ( is_array( $studies ) && ! empty( $studies ) ) {
+			$quality_labels = array(
+				'peer-reviewed'                              => 'Peer-reviewed human study',
+				'animal/preclinical'                         => 'Animal / preclinical study',
+				'RU literature (limited replication)'        => 'Russian literature — unreplicated, treat as unreliable',
+				'bro-lore (anecdotal)'                       => 'Bro-lore — anecdotal, no evidence base',
+			);
+			$content .= '<h3>Studies &amp; evidence</h3><ul class="opeptides-studies">';
+			foreach ( $studies as $study ) {
+				$q = isset( $study['quality'] ) ? $study['quality'] : '';
+				$ql = isset( $quality_labels[ $q ] ) ? $quality_labels[ $q ] : $q;
+				$content .= '<li>';
+				$content .= '<span class="opeptides-study-quality opeptides-quality-' . esc_attr( md5( $q ) ) . '">' . esc_html( $ql ) . '</span> ';
+				$content .= '<strong>' . esc_html( isset( $study['citation'] ) ? $study['citation'] : '' ) . '</strong>';
+				if ( ! empty( $study['finding'] ) ) {
+					$content .= '<br />' . esc_html( $study['finding'] );
+				}
+				$content .= '</li>';
+			}
+			$content .= '</ul>';
+		} elseif ( ! $studies_json ) {
+			$content .= '<h3>Studies &amp; evidence</h3><p class="opeptides-calc-note">No peer-reviewed human studies located for this compound. Treat all circulating protocols as unverified.</p>';
+		}
+
+		$bro = get_post_meta( $post_id, '_opeptide_bro_lore', true );
+		if ( $bro ) {
+			$content .= '<h3>Bro-lore</h3><p class="opeptides-bro-lore"><strong>Attributed as anecdotal:</strong> ' . esc_html( $bro ) . '</p>';
+		}
+
+		$content .= '<div class="opeptides-disclaimer opeptides-research-disclaimer" role="note">RESEARCH USE ONLY: this entry is for internal educational reference. It is not medical advice, not a recommendation to use any substance, and no dosing suggestion should be inferred. Don&rsquo;t do drugs.</div>';
+
+		return $content;
+	}
+
 	public function inject_disclaimer( $content ) {
+		if ( is_singular( Opeptides_CPT::POST_TYPE ) ) {
+			// single peptide pages get the banner plus their own sections
+			return $this->shortcodes->render_disclaimer() . $this->single_entry_sections( $content );
+		}
 		$sitewide = get_option( 'opeptides_sitewide_disclaimer', 0 );
 		$has_shortcode = false;
 		foreach ( array( 'opeptide_encyclopaedia', 'opeptide_calc', 'opeptide_diary', 'opeptide_disclaimer' ) as $tag ) {
