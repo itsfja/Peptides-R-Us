@@ -4,39 +4,82 @@ jQuery(function ($) {
 
 	/* ---------- Convipen cartridge calculator ---------- */
 	/* IU convention: pen dial units, 1 IU = 0.01 ml (U-100). */
+	function svgEl(tag, attrs) {
+		var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+		for (var k in attrs) { el.setAttribute(k, attrs[k]); }
+		return el;
+	}
+
 	function drawPenScale(cartridge) {
 		var $scale = $('#opep-pen-scale');
 		if ($scale.data('drawn')) { return; }
 		var ticks = 10;
 		for (var i = 0; i <= ticks; i++) {
-			var x = 244 + (112 * i / ticks);
-			var line = i % 5 === 0 ? 6 : 3;
-			$scale.append($(document.createElementNS('http://www.w3.org/2000/svg', 'line'))
-				.attr({ x1: x, y1: 44, x2: x, y2: 44 + line, stroke: '#888', 'stroke-width': 1 }));
+			var x = 46 + (112 * i / ticks);
+			$scale.append(svgEl('line', { x1: x, y1: 44, x2: x, y2: 44 + (i % 5 === 0 ? 6 : 3), stroke: '#e8e8e8', 'stroke-width': 1 }));
 			if (i % 5 === 0) {
-				$scale.append($(document.createElementNS('http://www.w3.org/2000/svg', 'text'))
-					.attr({ x: x, y: 57 }).text(((cartridge * 100) * i / ticks).toFixed(0)));
+				var t = svgEl('text', { x: x, y: 57 });
+				t.textContent = ((cartridge * 100) * i / ticks).toFixed(0);
+				$scale.append(t);
+			}
+		}
+		$scale.data('drawn', 1);
+	}
+
+	function drawSyrScale() {
+		var $scale = $('#opep-syr-scale');
+		if ($scale.data('drawn')) { return; }
+		var ticks = 10; /* 1 ml barrel, 100 IU total */
+		for (var i = 0; i <= ticks; i++) {
+			var x = 64 + (272 * i / ticks);
+			$scale.append(svgEl('line', { x1: x, y1: 46, x2: x, y2: 46 + (i % 5 === 0 ? 6 : 3), stroke: '#e8e8e8', 'stroke-width': 1 }));
+			if (i % 5 === 0) {
+				var t = svgEl('text', { x: x, y: 60 });
+				t.textContent = (100 * i / ticks).toFixed(0);
+				$scale.append(t);
 			}
 		}
 		$scale.data('drawn', 1);
 	}
 
 	function updatePen(doseVol, cartridge) {
-		var $pen = $('#opep-pen');
-		if (!$pen.length) { return; }
+		if (!$('#opep-pen').length) { return; }
 		var iu = doseVol * 100;
 		$('#opep-pen-dial').text(iu > 0 ? iu.toFixed(1) : '0');
 		var frac = cartridge > 0 ? Math.min(1, doseVol / cartridge) : 0;
 		var $marker = $('#opep-pen-dose-marker');
 		if (doseVol > 0) {
-			$marker.attr({ x: 244 + (112 * frac), visibility: 'visible' });
+			$marker.attr({ x: 46 + (112 * frac), visibility: 'visible' });
 		} else {
 			$marker.attr('visibility', 'hidden');
 		}
 	}
 
+	function updateSyringe(doseVol) {
+		if (!$('#opep-pen').length) { return; }
+		var frac = Math.min(1, doseVol / 1); /* 1 ml barrel */
+		$('#opep-syr-fluid').attr('width', Math.max(0, 272 * frac));
+		var $marker = $('#opep-syr-dose-marker');
+		if (doseVol > 0) {
+			$marker.attr({ x: 64 + (272 * frac), visibility: 'visible' });
+		} else {
+			$marker.attr('visibility', 'hidden');
+		}
+	}
+
+	function setDevice(device, doseVol, cartridge) {
+		var isPen = device !== 'syringe';
+		$('#opep-convipen-group').attr('visibility', isPen ? 'visible' : 'hidden');
+		$('#opep-syringe-group').attr('visibility', isPen ? 'hidden' : 'visible');
+		$('#opep-pen-note').text(isPen
+			? 'Convipen: dial readout shows the target dose in IU (1 IU = 0.01 ml). Amber marker shows the dose position within the cartridge.'
+			: 'Syringe: orange fill shows the volume to draw (needle end left). Amber marker shows the target on the U-100 scale.');
+		if (isPen) { updatePen(doseVol, cartridge); } else { updateSyringe(doseVol); }
+	}
+
 	function runCalc() {
 		var cartridge = parseFloat($('.opeptides-calc').data('cartridge')) || 3;
+		var device = $('#opep-device').val() || 'convipen';
 		var mass = parseFloat($('#opep-mass').val()) || 0;   // mg
 		var vol = parseFloat($('#opep-volume').val()) || 0; // ml
 		var doseRaw = parseFloat($('#opep-dose').val()) || 0; // mcg or mg
@@ -78,12 +121,38 @@ jQuery(function ($) {
 		if (doseVol > 0 && doseVol < 0.02) {
 			notes.push('Warning: dose volume is under 0.02 ml — measurement error will be significant.');
 		}
+		if (device === 'syringe' && doseVol > 1) {
+			notes.push('Warning: dose volume exceeds the 1 ml syringe capacity — split the dose or use the pen.');
+		}
 		$('#opep-r-note').text(notes.join(' '));
 		$('#opep-calc-results').show();
 
 		drawPenScale(cartridge);
-		updatePen(doseVol, cartridge);
+		drawSyrScale();
+		setDevice(device, doseVol, cartridge);
 	}
+
+	/* Switching device re-renders the diagram immediately. */
+	$(document).on('change', '#opep-device', function () {
+		var cartridge = parseFloat($('.opeptides-calc').data('cartridge')) || 3;
+		var device = $(this).val();
+		var doseVol = 0;
+		var conc, vol = parseFloat($('#opep-volume').val()) || 0;
+		var mass = parseFloat($('#opep-mass').val()) || 0;
+		conc = vol > 0 ? (mass * 1000) / vol : 0;
+		var doseIu = parseFloat($('#opep-dose-iu').val());
+		var doseRaw = parseFloat($('#opep-dose').val()) || 0;
+		var doseUnit = $('#opep-dose-unit').val() || 'mcg';
+		var dose = doseUnit === 'mg' ? doseRaw * 1000 : doseRaw;
+		if (isFinite(doseIu) && doseIu > 0) {
+			doseVol = doseIu / 100;
+		} else {
+			doseVol = conc > 0 ? dose / conc : 0;
+		}
+		drawPenScale(cartridge);
+		drawSyrScale();
+		setDevice(device, doseVol, cartridge);
+	});
 
 	/* Typing an IU value overrides the peptide-unit dose until cleared. */
 	$(document).on('input', '#opep-dose-iu', function () {

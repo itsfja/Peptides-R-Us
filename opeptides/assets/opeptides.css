@@ -91,6 +91,11 @@
 	border: 1px solid #4a4a4a; border-radius: 4px; cursor: pointer;
 }
 .opeptides-pen-wrap { margin: 1.5em 0; }
+.opeptides-device-select { display: block; margin-bottom: 8px; font-weight: 600; }
+.opeptides-device-select select {
+	margin-left: 6px; padding: 4px 8px; background: #161616; color: #e8e8e8;
+	border: 1px solid #3a3a3a; border-radius: 4px;
+}
 .opeptides-pen-wrap svg { max-width: 420px; width: 100%; height: auto; }
 .opeptides-calc-note { font-style: italic; opacity: 0.75; color: #e0a800; }
 
