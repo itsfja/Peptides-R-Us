@@ -68,7 +68,8 @@ class Opeptides_Shortcodes {
 						$meta[ $key ] = $value;
 					}
 				}
-				$out .= '<div class="opeptides-card">';
+				$evidence = Opeptides::evidence_class( get_the_ID() );
+				$out .= '<div class="opeptides-card' . ( $evidence ? ' opeptides-evidence-' . $evidence : '' ) . '">';
 				$out .= '<h3><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
 				if ( has_excerpt() ) {
 					$out .= '<p>' . esc_html( get_the_excerpt() ) . '</p>';

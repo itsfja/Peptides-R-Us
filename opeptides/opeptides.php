@@ -76,6 +76,37 @@ final class Opeptides {
 	 * (or everywhere, if the sitewide option is on).
 	 */
 	/**
+	 * Evidence grading: green = peer-reviewed human studies, amber = RU
+	 * literature only, red = blend or no preclinical studies at all.
+	 */
+	public static function evidence_class( $post_id ) {
+		$studies_json = get_post_meta( $post_id, '_opeptide_studies', true );
+		$studies = $studies_json ? json_decode( $studies_json, true ) : array();
+		$qualities = array();
+		if ( is_array( $studies ) ) {
+			foreach ( $studies as $study ) {
+				if ( isset( $study['quality'] ) ) {
+					$qualities[] = $study['quality'];
+				}
+			}
+		}
+		if ( in_array( 'peer-reviewed', $qualities, true ) ) {
+			return 'green';
+		}
+		if ( in_array( 'RU literature (limited replication)', $qualities, true ) ) {
+			return 'amber';
+		}
+		$formula = get_post_meta( $post_id, '_opeptide_formula', true );
+		if ( false !== stripos( (string) $formula, 'blend' ) ) {
+			return 'red';
+		}
+		if ( empty( $qualities ) ) {
+			return 'red'; // no preclinical studies located
+		}
+		return ''; // preclinical animal data only
+	}
+
+	/**
 	 * Single peptide pages: append the data fields, attributed studies,
 	 * bro-lore notes, and a research-use-only disclaimer.
 	 */
@@ -136,6 +167,11 @@ final class Opeptides {
 		$bro = get_post_meta( $post_id, '_opeptide_bro_lore', true );
 		if ( $bro ) {
 			$content .= '<h3>Bro-lore</h3><p class="opeptides-bro-lore"><strong>Attributed as anecdotal:</strong> ' . esc_html( $bro ) . '</p>';
+		}
+
+		$evidence = self::evidence_class( $post_id );
+		if ( $evidence ) {
+			$content = '<div class="opeptides-evidence-wrap opeptides-evidence-' . esc_attr( $evidence ) . '">' . $content . '</div>';
 		}
 
 		$content .= '<div class="opeptides-disclaimer opeptides-research-disclaimer" role="note">RESEARCH USE ONLY: this entry is for internal educational reference. It is not medical advice, not a recommendation to use any substance, and no dosing suggestion should be inferred. Don&rsquo;t do drugs.</div>';

@@ -160,3 +160,15 @@
 	color: #f5d97b; padding: 12px 14px;
 }
 .opeptides-research-disclaimer { margin-top: 2em; font-size: 0.9em; }
+
+/* Evidence grading colours */
+.opeptides-evidence-green { background: #15271b !important; }
+.opeptides-evidence-amber { background: #2a2212 !important; }
+.opeptides-evidence-red   { background: #2a1a1a !important; }
+.opeptides-evidence-wrap {
+	border-radius: 6px; padding: 16px; margin: 1em 0;
+	border: 1px solid #3a3a3a;
+}
+.opeptides-evidence-wrap.opeptides-evidence-green { border-color: #2e5a3e; }
+.opeptides-evidence-wrap.opeptides-evidence-amber { border-color: #6b5416; }
+.opeptides-evidence-wrap.opeptides-evidence-red   { border-color: #5a2e2e; }
