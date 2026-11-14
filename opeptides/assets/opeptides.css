@@ -75,6 +75,11 @@
 	appearance: auto !important;
 	-webkit-appearance: auto !important;
 }
+.opeptides-units select option,
+.opeptides-device-select select option {
+	background: #161616 !important;
+	color: #e8e8e8 !important;
+}
 .opeptides-calc-form .button,
 .opeptides-diary .opeptides-form .button,
 .opeptides-template .button {
@@ -108,6 +113,10 @@
 	min-height: 34px;
 	appearance: auto !important;
 	-webkit-appearance: auto !important;
+}
+.opeptides-device-select select option {
+	background: #161616 !important;
+	color: #e8e8e8 !important;
 }
 .opeptides-pen-wrap svg { max-width: 420px; width: 100%; height: auto; }
 .opeptides-calc-note { font-style: italic; opacity: 0.75; color: #e0a800; }
