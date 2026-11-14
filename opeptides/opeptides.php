@@ -76,8 +76,8 @@ final class Opeptides {
 	 * (or everywhere, if the sitewide option is on).
 	 */
 	/**
-	 * Evidence grading: green = peer-reviewed human studies, amber = RU
-	 * literature only, red = blend or no preclinical studies at all.
+	 * Evidence grading: green = peer-reviewed human studies, amber = RU or
+	 * animal-only evidence, red = blend or no preclinical studies at all.
 	 */
 	public static function evidence_class( $post_id ) {
 		$studies_json = get_post_meta( $post_id, '_opeptide_studies', true );
@@ -103,7 +103,7 @@ final class Opeptides {
 		if ( empty( $qualities ) ) {
 			return 'red'; // no preclinical studies located
 		}
-		return ''; // preclinical animal data only
+		return 'amber'; // preclinical animal data only
 	}
 
 	/**
