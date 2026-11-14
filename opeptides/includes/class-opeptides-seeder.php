@@ -153,7 +153,6 @@ class Opeptides_Seeder {
 				),
 				'category' => 'Weight Management',
 			),
-			'title_placeholder' => 'x',
 			array(
 				'title'   => 'Epithalon',
 				'excerpt' => 'Short synthetic tetrapeptide studied for telomerase activation and circadian/melatonin effects in ageing models.',
