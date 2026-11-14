@@ -281,32 +281,49 @@ class Opeptides_Seeder {
 		}
 		foreach ( $catalog as $item ) {
 			$name = isset( $item['name'] ) ? sanitize_text_field( $item['name'] ) : '';
-			if ( ! $name || self::find_by_title( $name ) ) {
+			if ( ! $name ) {
 				continue;
 			}
-			$strength    = isset( $item['strength'] ) ? sanitize_text_field( $item['strength'] ) : '';
-			$composition = isset( $item['composition'] ) ? sanitize_text_field( $item['composition'] ) : '';
-			$stock       = isset( $item['stock'] ) ? sanitize_text_field( $item['stock'] ) : '';
-			$warnings    = isset( $item['warnings'] ) && is_array( $item['warnings'] ) ? array_map( 'sanitize_text_field', $item['warnings'] ) : array();
-			$category    = isset( $item['category'] ) ? sanitize_text_field( $item['category'] ) : '';
+			$category = isset( $item['category'] ) ? sanitize_text_field( $item['category'] ) : '';
 
-			$lines   = array();
-			$lines[] = 'Catalog listing imported for internal reference. Research use only.';
-			if ( $strength )    { $lines[] = 'Strength options: ' . $strength; }
-			if ( $composition ) { $lines[] = 'Composition: ' . $composition; }
-			if ( $stock )       { $lines[] = 'Supplier stock status: ' . $stock; }
-			if ( $warnings )    { $lines[] = 'Supplier-flagged cautions: ' . implode( '; ', $warnings ); }
-			$lines[] = 'This entry is a catalog record, not a monograph. No dosing, safety or efficacy information is provided or implied.';
+			$existing_id = self::find_by_title( $name );
+			if ( $existing_id && strpos( get_post_field( 'post_content', $existing_id ), 'Catalog listing imported' ) === false ) {
+				continue; // already a curated monograph; never overwrite
+			}
 
-			$post_id = wp_insert_post( array(
-				'post_type'    => Opeptides_CPT::POST_TYPE,
-				'post_status'  => 'publish',
-				'post_title'   => $name,
-				'post_excerpt' => $category ? $name . ' — ' . $category . '.' : $name . '.',
-				'post_content' => implode( "\n\n", $lines ),
-			) );
+			$meta = isset( $item['meta'] ) && is_array( $item['meta'] ) ? $item['meta'] : array();
+			$content = isset( $item['content'] ) ? wp_kses_post( $item['content'] ) : '';
+			if ( ! $content ) {
+				$lines = array();
+				$strength = isset( $item['strength'] ) ? sanitize_text_field( $item['strength'] ) : '';
+				$composition = isset( $item['composition'] ) ? sanitize_text_field( $item['composition'] ) : '';
+				if ( $strength )    { $lines[] = 'Strength options: ' . $strength; }
+				if ( $composition ) { $lines[] = 'Composition: ' . $composition; }
+				$content = implode( "\n\n", $lines );
+			}
+			$excerpt = isset( $item['excerpt'] ) ? sanitize_text_field( $item['excerpt'] ) : ( $category ? $name . ' — ' . $category . '.' : $name . '.' );
+
+			if ( $existing_id ) {
+				wp_update_post( array(
+					'ID'           => $existing_id,
+					'post_content' => $content,
+					'post_excerpt' => $excerpt,
+				) );
+				$post_id = $existing_id;
+			} else {
+				$post_id = wp_insert_post( array(
+					'post_type'    => Opeptides_CPT::POST_TYPE,
+					'post_status'  => 'publish',
+					'post_title'   => $name,
+					'post_excerpt' => $excerpt,
+					'post_content' => $content,
+				) );
+			}
 			if ( is_wp_error( $post_id ) || ! $post_id ) {
 				continue;
+			}
+			foreach ( $meta as $key => $value ) {
+				update_post_meta( $post_id, '_opeptide_' . sanitize_key( $key ), sanitize_text_field( $value ) );
 			}
 			if ( $category ) {
 				$term = term_exists( $category, Opeptides_CPT::TAXONOMY );
