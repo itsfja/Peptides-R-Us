@@ -6,6 +6,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Opeptides_Seeder {
 
+	/**
+	 * Find an existing encyclopaedia post by exact title.
+	 */
+	private static function find_by_title( $title ) {
+		$found = get_posts( array(
+			'post_type'        => Opeptides_CPT::POST_TYPE,
+			'post_status'      => 'any',
+			'title'            => $title,
+			'posts_per_page'   => 1,
+			'fields'           => 'ids',
+			'no_found_rows'    => true,
+			'suppress_filters' => true,
+		) );
+		return ! empty( $found ) ? (int) $found[0] : 0;
+	}
+
 	public static function seed() {
 
 		$peptides = array(
@@ -220,7 +236,7 @@ class Opeptides_Seeder {
 		);
 
 		foreach ( $peptides as $p ) {
-			$existing = get_page_by_title( $p['title'], OBJECT, Opeptides_CPT::POST_TYPE );
+			$existing = self::find_by_title( $p['title'] );
 			if ( $existing ) {
 				continue;
 			}
@@ -265,7 +281,7 @@ class Opeptides_Seeder {
 		}
 		foreach ( $catalog as $item ) {
 			$name = isset( $item['name'] ) ? sanitize_text_field( $item['name'] ) : '';
-			if ( ! $name || get_page_by_title( $name, OBJECT, Opeptides_CPT::POST_TYPE ) ) {
+			if ( ! $name || self::find_by_title( $name ) ) {
 				continue;
 			}
 			$strength    = isset( $item['strength'] ) ? sanitize_text_field( $item['strength'] ) : '';
