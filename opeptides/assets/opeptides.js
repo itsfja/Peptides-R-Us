@@ -104,6 +104,7 @@ jQuery(function ($) {
 		}
 
 		var totalDoses = doseVol > 0 ? vol / doseVol : 0;
+		totalDoses = Math.round(totalDoses * 1e6) / 1e6; /* tame float artifacts before flooring */
 		var days = totalDoses > 0 ? totalDoses / dosesPerDay : 0;
 		var atPointOne = conc * 0.1; // mcg delivered in 0.1 ml
 		var iu = doseVol * 100;
